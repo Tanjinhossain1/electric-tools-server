@@ -20,7 +20,8 @@ async function run() {
     try {
         await client.connect()
         const toolsCollection = client.db("Products").collection("tools");
-
+        const PurchaseCollection = client.db("Products").collection("purchase");
+        //   all get method   / /
         app.get('/tools',async(req,res)=>{
             const tools = await toolsCollection.find().toArray();
             res.send(tools)
@@ -31,6 +32,28 @@ async function run() {
             const findTool = await toolsCollection.findOne(query);
             res.send(findTool)
         })
+        // show purchase orders
+        app.get('/orders',async(req,res)=>{
+            const email = req.query.email;
+            const query = {email: email}
+            const orders = await PurchaseCollection.find(query).toArray();
+            res.send(orders)
+        })
+        app.get('/orders/:id',async(req,res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const orders = await PurchaseCollection.find(query).toArray();
+            res.send(orders)
+        })
+        
+        // all Post method //
+        app.post('/purchase',async (req,res)=>{
+            const purchaseTool = req.body;
+            const result = await PurchaseCollection.insertOne(purchaseTool);
+            res.send(result)
+        })
+        
+
 
     }
     finally {
