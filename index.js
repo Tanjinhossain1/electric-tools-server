@@ -21,6 +21,7 @@ async function run() {
         await client.connect()
         const toolsCollection = client.db("Products").collection("tools");
         const PurchaseCollection = client.db("Products").collection("purchase");
+        const reviewCollection = client.db("Products").collection("reviews");
         //   all get method   / /
         app.get('/tools', async (req, res) => {
             const tools = await toolsCollection.find().toArray();
@@ -64,22 +65,37 @@ async function run() {
             })
             res.send({ clientSecret: payment.client_secret })
         })
+
+
+        app.post('/addReview', async (req, res)=>{
+            const review = req.body;
+            const addReview = await reviewCollection.insertOne(review);
+            res.send(addReview)
+        })
+
+
         // using patch 
-        app.patch('/purchase/:id',async(req,res)=>{
+        app.patch('/purchase/:id', async (req, res) => {
             const id = req.params.id;
             const payment = req.body;
-            const filter = {_id: ObjectId(id)};
-            const updatedDoc={
-                $set:{
+            const filter = { _id: ObjectId(id) };
+            const updatedDoc = {
+                $set: {
                     paid: true,
                     transactionId: payment.transactionId
                 }
             }
-            const updatePayment = await PurchaseCollection.updateOne(filter,updatedDoc);
+            const updatePayment = await PurchaseCollection.updateOne(filter, updatedDoc);
             res.send(updatePayment)
         })
 
-
+        // delete purchase tool
+        app.delete('/deletePurchaseTool/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const deleteTool = await PurchaseCollection.deleteOne(query);
+            res.send(deleteTool)
+        })
 
 
     }
