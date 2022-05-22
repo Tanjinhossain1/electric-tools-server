@@ -47,6 +47,14 @@ async function run() {
             res.send(orders)
         })
 
+        app.get('/reviews',async(req,res)=>{
+            const reviews= await reviewCollection.find().toArray();
+            res.send(reviews)
+        })
+
+
+
+
         // all Post method //
         app.post('/purchase', async (req, res) => {
             const purchaseTool = req.body;
