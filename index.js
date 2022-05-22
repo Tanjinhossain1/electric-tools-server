@@ -3,12 +3,12 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config()
 const port = process.env.PORT || 5000
+const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
+
+
 
 app.use(cors())
 app.use(express.json())
-
-
-
 
 
 
@@ -22,37 +22,64 @@ async function run() {
         const toolsCollection = client.db("Products").collection("tools");
         const PurchaseCollection = client.db("Products").collection("purchase");
         //   all get method   / /
-        app.get('/tools',async(req,res)=>{
+        app.get('/tools', async (req, res) => {
             const tools = await toolsCollection.find().toArray();
             res.send(tools)
         })
-        app.get('/tools/:id',async(req,res)=>{
+        app.get('/tools/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const findTool = await toolsCollection.findOne(query);
             res.send(findTool)
         })
         // show purchase orders
-        app.get('/orders',async(req,res)=>{
+        app.get('/orders', async (req, res) => {
             const email = req.query.email;
-            const query = {email: email}
+            const query = { email: email }
             const orders = await PurchaseCollection.find(query).toArray();
             res.send(orders)
         })
-        app.get('/orders/:id',async(req,res)=>{
+        app.get('/orders/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)}
+            const query = { _id: ObjectId(id) }
             const orders = await PurchaseCollection.find(query).toArray();
             res.send(orders)
         })
-        
+
         // all Post method //
-        app.post('/purchase',async (req,res)=>{
+        app.post('/purchase', async (req, res) => {
             const purchaseTool = req.body;
             const result = await PurchaseCollection.insertOne(purchaseTool);
             res.send(result)
         })
-        
+
+        // payment method api 
+        app.post('/create-payment', async (req, res) => {
+            const { newPrice } = req.body;
+            const amount = newPrice * 100;
+            const payment = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: 'usd',
+                payment_method_types: ['card']
+            })
+            res.send({ clientSecret: payment.client_secret })
+        })
+        // using patch 
+        app.patch('/purchase/:id',async(req,res)=>{
+            const id = req.params.id;
+            const payment = req.body;
+            const filter = {_id: ObjectId(id)};
+            const updatedDoc={
+                $set:{
+                    paid: true,
+                    transactionId: payment.transactionId
+                }
+            }
+            const updatePayment = await PurchaseCollection.updateOne(filter,updatedDoc);
+            res.send(updatePayment)
+        })
+
+
 
 
     }
