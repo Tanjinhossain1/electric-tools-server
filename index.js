@@ -63,6 +63,18 @@ async function run() {
             res.send(profile)
         })
 
+        app.get('/findAdmin/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === 'admin';
+            res.send({ admin: isAdmin })
+        })
+
+        app.get('/showAllUser', async (req, res) => {
+            const allUser = await userCollection.find().toArray();
+            res.send(allUser)
+        })
+
 
         // all Post method //
         app.post('/purchase', async (req, res) => {
@@ -129,10 +141,10 @@ async function run() {
             res.send(result)
         })
 
-        app.put('/allUser/:email',async(req,res)=>{
+        app.put('/allUser/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
-            console.log(user,email)
+            console.log(user, email)
             const filter = { email: email };
             const options = { upsert: true };
             const updateDoc = {
@@ -142,6 +154,17 @@ async function run() {
             res.send(result)
         })
 
+        app.put('/makeAdmin/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    role: 'admin'
+                }
+            }
+            const result = await userCollection.updateOne(filter, updatedDoc);
+            res.send(result)
+        })
 
 
 
