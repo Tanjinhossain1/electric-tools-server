@@ -50,12 +50,17 @@ async function run() {
             res.send(orders)
         })
 
-        app.get('/reviews',async(req,res)=>{
-            const reviews= await reviewCollection.find().toArray();
+        app.get('/reviews', async (req, res) => {
+            const reviews = await reviewCollection.find().toArray();
             res.send(reviews)
         })
 
-
+        app.get('/profile', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email }
+            const profile = await profileCollection.find(query).toArray();
+            res.send(profile)
+        })
 
 
         // all Post method //
@@ -77,13 +82,13 @@ async function run() {
             res.send({ clientSecret: payment.client_secret })
         })
 
-        app.post('/addReview', async (req, res)=>{
+        app.post('/addReview', async (req, res) => {
             const review = req.body;
             const addReview = await reviewCollection.insertOne(review);
             res.send(addReview)
         })
-        
-        app.post('/addProfile',async(req,res)=>{
+
+        app.post('/addProfile', async (req, res) => {
             const profile = req.body;
             const addProfile = await profileCollection.insertOne(profile);
             res.send(addProfile)
@@ -105,6 +110,27 @@ async function run() {
             res.send(updatePayment)
         })
 
+        // put method 
+
+        app.put('/profileUpdate/:id', async (req, res) => {
+            const id = req.params.id;
+            const profile = req.body;
+            const filter = { _id: ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    education: profile.education,
+                    location: profile.location,
+                    number: profile.number,
+                    linkDin: profile.linkDin,
+                },
+            };
+            const result = await profileCollection.updateOne(filter, updateDoc);
+            res.send(result)
+        })
+
+
+
+
         // delete purchase tool
         app.delete('/deletePurchaseTool/:id', async (req, res) => {
             const id = req.params.id;
@@ -121,10 +147,6 @@ async function run() {
 
 }
 run().catch(console.dir())
-
-
-
-
 
 
 
