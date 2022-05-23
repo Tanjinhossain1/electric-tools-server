@@ -13,6 +13,7 @@ app.use(express.json())
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { json } = require('express');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f9lm3.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -82,6 +83,14 @@ async function run() {
 
 
         // all Post method //
+
+
+        app.post('/addProduct',async(req,res)=>{
+            const productDetail = req.body;
+            const addProduct = await toolsCollection.insertOne(productDetail);
+            res.send(addProduct)
+        })
+
         app.post('/purchase', async (req, res) => {
             const purchaseTool = req.body;
             const result = await PurchaseCollection.insertOne(purchaseTool);
@@ -172,7 +181,13 @@ async function run() {
         })
 
 
-
+        // delete tool product 
+        app.delete('/deleteProduct/:id',async(req,res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const deleteProduct = await toolsCollection.deleteOne(query);
+            res.send(deleteProduct)
+        })
         // delete purchase tool
         app.delete('/deletePurchaseTool/:id', async (req, res) => {
             const id = req.params.id;
