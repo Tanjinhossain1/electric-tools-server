@@ -22,6 +22,9 @@ async function run() {
         const toolsCollection = client.db("Products").collection("tools");
         const PurchaseCollection = client.db("Products").collection("purchase");
         const reviewCollection = client.db("Products").collection("reviews");
+        const profileCollection = client.db("Products").collection("addProfile");
+
+
         //   all get method   / /
         app.get('/tools', async (req, res) => {
             const tools = await toolsCollection.find().toArray();
@@ -74,11 +77,16 @@ async function run() {
             res.send({ clientSecret: payment.client_secret })
         })
 
-
         app.post('/addReview', async (req, res)=>{
             const review = req.body;
             const addReview = await reviewCollection.insertOne(review);
             res.send(addReview)
+        })
+        
+        app.post('/addProfile',async(req,res)=>{
+            const profile = req.body;
+            const addProfile = await profileCollection.insertOne(profile);
+            res.send(addProfile)
         })
 
 
