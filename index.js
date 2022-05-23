@@ -23,6 +23,7 @@ async function run() {
         const PurchaseCollection = client.db("Products").collection("purchase");
         const reviewCollection = client.db("Products").collection("reviews");
         const profileCollection = client.db("Products").collection("addProfile");
+        const userCollection = client.db("Products").collection("AllUsers");
 
 
         //   all get method   / /
@@ -125,6 +126,19 @@ async function run() {
                 },
             };
             const result = await profileCollection.updateOne(filter, updateDoc);
+            res.send(result)
+        })
+
+        app.put('/allUser/:email',async(req,res)=>{
+            const email = req.params.email;
+            const user = req.body;
+            console.log(user,email)
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            }
+            const result = await userCollection.updateOne(filter, updateDoc, options);
             res.send(result)
         })
 
