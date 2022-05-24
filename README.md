@@ -26,8 +26,7 @@
 
 #### “*” 3. When You add Your Quantity or Your Quantity more then minimum quantity or your Quantity is less by MinimumQuantity Then Purchase Button is disabled. You order more then available quantity then also disabled the button.
 
-#### “*” 4. When you Purchase is Success Fully then All information is have the DashBoard. DashBoard have two type of route one is user only and two is admin only.
-Normal User can purchase the product. Dashboard have (user only) my orders or add a review and my profile is active for all type of user.
+#### “*” 4. When you Purchase is Success Fully then All information is have the DashBoard. DashBoard have two type of route one is user only and two is admin only.Normal User can purchase the product. Dashboard have (user only) my orders or add a review and my profile is active for all type of user.
 
 #### “*” 5. MyOrder page show the all product when you purchase and ther have a order button you click the order button then go to the payment route you give the card information and click pay button then your product is paid or you see the transection IO or Myorder page.  
 

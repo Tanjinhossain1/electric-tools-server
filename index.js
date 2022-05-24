@@ -93,11 +93,15 @@ async function run() {
             res.send(allUser)
         })
 
+        app.get('/allOrders', async (req, res) => {
+            const allOrders = await PurchaseCollection.find().toArray();
+            res.send(allOrders)
+        })
 
         // all Post method //
 
 
-        app.post('/addProduct',verifyToken, async (req, res) => {
+        app.post('/addProduct', verifyToken, async (req, res) => {
             const productDetail = req.body;
             const addProduct = await toolsCollection.insertOne(productDetail);
             res.send(addProduct)
@@ -127,7 +131,7 @@ async function run() {
             res.send(addReview)
         })
 
-        app.post('/addProfile', async (req, res) => {
+        app.post('/addProfile',verifyToken, async (req, res) => {
             const profile = req.body;
             const addProfile = await profileCollection.insertOne(profile);
             res.send(addProfile)
@@ -151,7 +155,7 @@ async function run() {
 
         // put method 
 
-        app.put('/profileUpdate/:id', async (req, res) => {
+        app.put('/profileUpdate/:id',verifyToken, async (req, res) => {
             const id = req.params.id;
             console.log(req.headers.authorization)
             const profile = req.body;
@@ -181,7 +185,7 @@ async function run() {
             res.send({ result, token });
         })
 
-        app.put('/makeAdmin/:id', async (req, res) => {
+        app.put('/makeAdmin/:id',verifyToken, async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
             const updatedDoc = {
@@ -190,6 +194,18 @@ async function run() {
                 }
             }
             const result = await userCollection.updateOne(filter, updatedDoc);
+            res.send(result)
+        })
+
+        app.put('/updatePaid/:id',async(req,res)=>{
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const updatePaid = {
+                $set:{
+                    shipped: 'shipped'
+                }
+            }
+            const result = await PurchaseCollection.updateOne(filter,updatePaid);
             res.send(result)
         })
 
