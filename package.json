@@ -17,5 +17,13 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.6.0",
     "stripe": "^9.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tanjinhossain1/electric-tools-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tanjinhossain1/electric-tools-server/issues"
+  },
+  "homepage": "https://github.com/Tanjinhossain1/electric-tools-server#readme"
 }

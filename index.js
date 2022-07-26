@@ -56,9 +56,10 @@ async function run() {
         })
         // show purchase orders
         app.get('/orders', async (req, res) => {
-            const email = req.query.email;
-            const query = { email: email }
-            const orders = await PurchaseCollection.find(query).toArray();
+            // const email = req.query.email;
+            // const query = { email: email }
+            // const orders = await PurchaseCollection.find(query).toArray();
+            const orders = await PurchaseCollection.find().toArray();
             res.send(orders)
         })
         app.get('/orders/:id', async (req, res) => {
