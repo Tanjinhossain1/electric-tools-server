@@ -102,7 +102,7 @@ async function run() {
         // all Post method //
 
 
-        app.post('/addProduct', verifyToken, async (req, res) => {
+        app.post('/addProduct', async (req, res) => {
             const productDetail = req.body;
             const addProduct = await toolsCollection.insertOne(productDetail);
             res.send(addProduct)
