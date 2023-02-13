@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config();
+require('dotenv').config(); 
 var jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000
 const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
@@ -12,7 +12,14 @@ const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
 app.use(cors())
 app.use(express.json())
 
-
+const sample_data = [
+    {
+        "alt": "Tabby",
+"name": "Tabby",
+"src": "http://localhost:3000/api/v1/server/load-file?path=2022P2/Files/File_2023-February-10%20at%2010.50.20.jpeg",
+"tag": "Cat"
+    }
+]
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     console.log(authHeader)
@@ -47,6 +54,9 @@ async function run() {
         app.get('/tools', async (req, res) => {
             const tools = await toolsCollection.find().toArray();
             res.send(tools)
+        })
+        app.get('/patient-field', async (req, res) => { 
+            res.send({r2: sample_data, result: sample_data, statusCode: 200})
         })
         app.get('/tools/:id', async (req, res) => {
             const id = req.params.id;
