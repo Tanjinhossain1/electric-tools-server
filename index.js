@@ -14,10 +14,22 @@ app.use(express.json())
 
 const sample_data = [
     {
-        "alt": "Tabby",
-"name": "Tabby",
+        "alt": "Patient Medical Record",
+"name": "Patient Medical Record",
 "src": "http://localhost:3000/api/v1/server/load-file?path=2022P2/Files/File_2023-February-10%20at%2010.50.20.jpeg",
-"tag": "Cat"
+"tag": "X-Ray"
+    },
+    {
+        "alt": "Patient Medical Record",
+"name": "Patient Medical Record",
+"src": "http://localhost:3000/api/v1/server/load-file?path=2022P2/Files/File_2023-February-10%20at%2010.49.48.jpg",
+"tag": "X-Ray"
+    },
+    {
+"alt": "Patient Medical Record",
+"name": "Patient Medical Record",
+"src": "http://localhost:3000/api/v1/server/load-file?path=2022P2/Files/File_2023-February-10%20at%2010.50.20.jpeg",
+"tag": "X-Ray"
     }
 ]
 const verifyToken = (req, res, next) => {
